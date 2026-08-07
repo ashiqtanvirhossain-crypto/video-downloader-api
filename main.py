@@ -4,7 +4,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# সব ডোমেইন থেকে রিকোয়েস্ট অ্যালাউ করার জন্য CORS মিডলওয়্যার
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -15,8 +14,9 @@ app.add_middleware(
 
 @app.get("/download")
 def get_video_info(url: str):
+    # ইউটিউবের জন্য আধুনিক এবং নিরাপদ ফরম্যাট অপশন
     ydl_opts = {
-        'format': 'best',
+        'format': 'best[ext=mp4]/best',
         'cookiefile': 'cookies.txt',
         'quiet': True,
         'noplaylist': True,
