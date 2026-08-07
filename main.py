@@ -14,9 +14,8 @@ app.add_middleware(
 
 @app.get("/download")
 def get_video_info(url: str):
-    # ইউটিউবের জন্য আধুনিক এবং নিরাপদ ফরম্যাট অপশন
+    # ইউটিউবের ফরম্যাট এরর এড়াতে 'best' বা খালি রাখা সবচেয়ে নিরাপদ
     ydl_opts = {
-        'format': 'best[ext=mp4]/best',
         'cookiefile': 'cookies.txt',
         'quiet': True,
         'noplaylist': True,
@@ -29,7 +28,7 @@ def get_video_info(url: str):
             download_url = info.get('url')
             if not download_url and 'formats' in info:
                 for f in info['formats']:
-                    if f.get('url') and f.get('ext') == 'mp4':
+                    if f.get('url'):
                         download_url = f.get('url')
                         break
             
