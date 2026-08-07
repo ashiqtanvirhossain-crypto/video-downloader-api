@@ -1,7 +1,17 @@
 import yt_dlp
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+# সব ডোমেইন থেকে রিকোয়েস্ট অ্যালাউ করার জন্য CORS মিডলওয়্যার
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/download")
 def get_video_info(url: str):
@@ -16,7 +26,6 @@ def get_video_info(url: str):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             
-            # সেরা ডাউনলোড লিংক বের করার লজিক
             download_url = info.get('url')
             if not download_url and 'formats' in info:
                 for f in info['formats']:
