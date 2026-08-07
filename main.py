@@ -14,17 +14,19 @@ app.add_middleware(
 
 @app.get("/download")
 def get_video_info(url: str):
-    # ইউটিউবের ফরম্যাট এরর এড়াতে 'best' বা খালি রাখা সবচেয়ে নিরাপদ
+    # কোনো নির্দিষ্ট ফরম্যাট বা এক্সটেনশন ফিল্টার ছাড়াই সবচেয়ে সেফ অপশন
     ydl_opts = {
         'cookiefile': 'cookies.txt',
         'quiet': True,
         'noplaylist': True,
+        'extract_flat': False,
     }
     
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             
+            # সরাসরি ডাউনলোড লিংক বের করার উন্নত লজিক
             download_url = info.get('url')
             if not download_url and 'formats' in info:
                 for f in info['formats']:
